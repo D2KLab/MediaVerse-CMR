@@ -1,0 +1,14 @@
+certifi==2020.12.5
+chardet==4.0.0
+click==8.0.0
+idna==2.10
+joblib==1.0.1
+nltk==3.6.2
+numpy==1.20.3
+regex==2021.4.4
+requests==2.25.1
+torch==1.8.1
+torchtext==0.9.1
+tqdm==4.60.0
+typing-extensions==3.10.0.0
+urllib3==1.26.4
