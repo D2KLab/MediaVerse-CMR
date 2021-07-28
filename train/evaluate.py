@@ -1,15 +1,10 @@
-#import libraries and modules
-import json
 import os
 import pdb
 import random
 
 import numpy as np
-import pandas as pd
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
-import torchtext
 from sklearn.metrics import f1_score, precision_score, recall_score
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -89,6 +84,7 @@ MAX_N_TOKENS    = 15
 
 
 vdata  = CocoCaptions(captions_json=v_captions_json, instances_json=v_instances_json, max_instances_n=MAX_N_INSTANCES, max_tokens_n=MAX_N_TOKENS, pad_token=pad_token)
+vdata.data = vdata.data[len(vdata.data)//2:]
 params = {'batch_size': batch_size,
           'shuffle': True,
           'num_workers': n_workers,

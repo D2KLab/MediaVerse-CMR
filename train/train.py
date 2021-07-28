@@ -51,6 +51,7 @@ MAX_N_TOKENS    = 15
 
 tdata  = CocoCaptions(captions_json=t_captions_json, instances_json=t_instances_json, max_instances_n=MAX_N_INSTANCES, max_tokens_n=MAX_N_TOKENS, pad_token=pad_token)
 vdata  = CocoCaptions(captions_json=v_captions_json, instances_json=v_instances_json, max_instances_n=MAX_N_INSTANCES, max_tokens_n=MAX_N_TOKENS, pad_token=pad_token)
+vdata.data = vdata.data[:len(vdata.data)//2]
 params = {'batch_size': batch_size,
           'shuffle': True,
           'num_workers': n_workers,

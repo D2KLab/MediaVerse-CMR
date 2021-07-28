@@ -1,8 +1,16 @@
+#python
 __pycache__
+venv_*
+
+#model params
+*.pth
 .vector_cache
 glove
-venv_cmr
+word2id.json
+
+#other
 todo.txt
 outs
 runs
-data/
+data
+log
