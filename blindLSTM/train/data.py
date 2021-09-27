@@ -12,10 +12,9 @@ from torch.utils.data import Dataset
 class CocoCaptions(Dataset):
     """COCO class that return matching (capt, objects) pairs 50% of times
     """
-
     def __init__(self, captions_json: str, instances_json: str, max_tokens_n: int, max_instances_n: int, pad_token: str='<pad>'):
         super(CocoCaptions, self).__init__()
-        self.max_tokens_n   = max_tokens_n
+        self.max_tokens_n    = max_tokens_n
         self.max_instances_n = max_instances_n
         self.pad_token       = pad_token
         with open(captions_json, 'r') as fp:
@@ -42,7 +41,6 @@ class CocoCaptions(Dataset):
             if random.uniform(0, 1) > .5:
                 return neg_capt, inst, 0
             return capt, neg_inst, 0
-            
 
     def _get_sample(self, index: int) -> Tuple[str, str]:
         item  = self.data[index]
