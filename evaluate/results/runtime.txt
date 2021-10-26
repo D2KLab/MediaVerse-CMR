@@ -1,0 +1,16 @@
+
+cosine_similarity:
+    - device:      cpu
+    - Pool size:   torch.Size([1000000, 512])
+    - Query size:  torch.Size([100000, 512])
+    - batch:       1000
+    - runtime:     0:01:42.221022
+
+
+cosine_similarity:
+    - device:      gpu
+    - Pool size:   torch.Size([1000000, 512])
+    - Query size:  torch.Size([100000, 512])
+    - batch:       1000
+    - memory peak: 6861 MiB
+    - runtime:     0:00:13.463387

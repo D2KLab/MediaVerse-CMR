@@ -1,0 +1,15 @@
+1k (5 folds):
+
+    Image retrieval
+    R@1: 0.517, R@5: 0.793, R@10: 0.889
+
+    Text retrieval:
+    R@1: 0.549, R@5: 0.825, R@10: 0.910
+
+5k:
+
+    Image retrieval
+    R@1: 0.305, R@5: 0.561, R@10: 0.670
+
+    Text retrieval:
+    R@1: 0.377, R@5: 0.614, R@10: 0.718

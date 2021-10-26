@@ -9,7 +9,7 @@ Tensor = TypeVar('torch.Tensor')
 
 
 class CLIP():
-    def __init__(self, vis_model: str, device: str = 'cpu') -> None:
+    def __init__(self, vis_model: str='ViT-B/32', device: str = 'cpu') -> None:
         self.device = torch.device(device)
         try:
             print('loading model ...')
