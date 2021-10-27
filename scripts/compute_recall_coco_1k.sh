@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-source ~/mediaverse/MediaVerse-CMR/venv_mediaverse/bin/activate
+source ./venv_mediaverse/bin/activate
 
 python evaluate/compute_recall_coco_1k.py \
     --data_root $COCO_PATH \

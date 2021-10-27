@@ -4,7 +4,7 @@ Cross-Modal retrieval module for T3.2 of MediaVerse
 ## Installation
 Create a Python virtual environment and activate it
 ```
-python3 -m venv_mediaverse
+python3 -m venv venv_mediaverse
 source venv_mediaverse/bin/activate
 ```
 

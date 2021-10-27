@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-source ~/mediaverse/MediaVerse-CMR/venv_mediaverse/bin/activate
+source ./venv_mediaverse/bin/activate
 
 python table_stats.py \
     --table_file concepts_table.json \
