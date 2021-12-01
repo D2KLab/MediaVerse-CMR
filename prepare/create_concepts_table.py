@@ -1,3 +1,11 @@
+"""
+@author: Matteo A. Senese
+
+This script creates the concept table by fetching ConceptNet with the objects tag present in MSCOCO.
+The concepts in the table are always lemmatized.
+"""
+
+
 import json
 import pdb
 from typing import Dict, List, Set

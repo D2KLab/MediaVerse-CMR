@@ -1,6 +1,5 @@
 #python
 __pycache__
-venv_*
 
 #model params
 *.pth

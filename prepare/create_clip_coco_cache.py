@@ -1,7 +1,14 @@
+"""
+@author: Matteo A. Senese
+
+This script produces CLIP embeddings for images and captions and cache them on disk
+"""
+
+
+
 import argparse
 
 import os
-import json
 import torch
 
 from common import CLIP, COCOCaptions5k
@@ -18,7 +25,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--images_dir',
         type=str,
-        help='Path to MSCOCO images directory wrt to specified data root'
+        help='Path to MSCOCO images directory wrt specified data root'
     )
     parser.add_argument(
         '--image_retrieval_annotations',

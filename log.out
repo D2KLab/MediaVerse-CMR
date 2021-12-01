@@ -1,0 +1,17 @@
+Namespace(coco_text='cache/coco_text_cache.pth', coco_visual='cache/coco_visual_cache.pth', cuda=False)
+Runtime: size: 2000 K:800   --   cosine: 0.0022576673030853273     faiss:0.00023929572105407714
+Runtime: size: 5000 K:800   --   cosine: 0.007934577941894531     faiss:0.000521765947341919
+Runtime: size: 10000 K:800   --   cosine: 0.036139125108718875     faiss:0.0014089937210083007
+Runtime: size: 20000 K:800   --   cosine: 0.07315334415435791     faiss:0.003392304182052612
+Runtime: size: 30000 K:800   --   cosine: 0.11042795062065125     faiss:0.005186567783355713
+Runtime: size: 40000 K:800   --   cosine: 0.14904284024238587     faiss:0.007020475149154663
+Runtime: size: 50000 K:800   --   cosine: 0.1916082708835602     faiss:0.008779634714126587
+Runtime: size: 100000 K:800   --   cosine: 0.3891613464355469     faiss:0.018157416105270385
+Runtime: size: 1000000 K:800   --   cosine: 3.6828812398910524     faiss:0.18179020404815674
+Runtime: size: 1000000 K:10   --   cosine: 3.65714696598053     faiss:0.1845524251461029
+Runtime: size: 1000000 K:100   --   cosine: 3.6661126704216005     faiss:0.18426606512069701
+Runtime: size: 1000000 K:200   --   cosine: 3.670680520296097     faiss:0.18432186794281005
+Runtime: size: 1000000 K:400   --   cosine: 3.671216938495636     faiss:0.18162520623207093
+Runtime: size: 1000000 K:600   --   cosine: 3.671099909067154     faiss:0.18447587704658508
+Runtime: size: 1000000 K:800   --   cosine: 3.683704137802124     faiss:0.18435282516479493
+Runtime: size: 1000000 K:1000   --   cosine: 3.6801348536014555     faiss:0.1845939519405365

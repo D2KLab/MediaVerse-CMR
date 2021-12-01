@@ -1,4 +1,21 @@
 
+filtering + cosine:
+    - device:      cpu
+    - Pool size:   5000
+    - Query size:  25010
+    - batch:       1
+    - filtering run time: 0:02:30.018137
+    - total:              0:25:55.978885
+
+
+cosine_similarity:
+    - device:      cpu
+    - Pool size:   torch.Size([5000, 512])
+    - Query size:  torch.Size([250010, 512])
+    - batch:       1
+    - runtime:     0:25:11.471778
+
+
 cosine_similarity:
     - device:      cpu
     - Pool size:   torch.Size([1000000, 512])

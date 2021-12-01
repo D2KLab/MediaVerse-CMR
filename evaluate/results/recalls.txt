@@ -1,0 +1,20 @@
+1k (5 folds):
+
+    Image retrieval
+        - vanilla: R@1: 0.517, R@5: 0.793, R@10: 0.889
+        - faiss:   R@1: 0.515, R@5: 0.792, R@10: 0.888
+
+    Text retrieval:
+        - vanilla: R@1: 0.548, R@5: 0.825, R@10: 0.910
+        - faiss:   R@1: 0.547, R@5: 0.824, R@10: 0.909
+
+
+5k:
+
+    Image retrieval
+        - vanilla: R@1: 0.305, R@5: 0.561, R@10: 0.670
+        - faiss:   R@1: 0.304, R@5: 0.559, R@10: 0.669
+
+    Text retrieval:
+        - vanilla: R@1: 0.378, R@5: 0.614, R@10: 0.718
+        - faiss:   R@1: 0.376, R@5: 0.611, R@10: 0.716

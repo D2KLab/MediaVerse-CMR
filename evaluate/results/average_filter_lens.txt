@@ -1,0 +1,3 @@
+average number of images that passes the filter:
+
+3732 / 5000

@@ -1,14 +1,20 @@
+"""
+@author: Matteo A. Senese
+
+This script computes the recall on MSCOCO-5K split using the cosine similarity on CLIP embeddings.
+
+The recalls are computed for: vanilla cosine, filter+cosine, faiss.
+"""
+
+
 import argparse
-import os
-import pdb
 from typing import Dict, List, TypeVar
 
 import torch
-from tqdm import tqdm
 
 
 from common import COCOCaptions5k
-from common.utils import compute_recalls
+from common.utils import compute_recalls_vanilla, compute_recalls_faiss
 
 
 Tensor      = TypeVar('torch.Tensor')
@@ -68,10 +74,18 @@ if __name__ == '__main__':
     v_cache = torch.load(args.images_cache)
     device  = torch.device('cuda:0' if args.cuda else 'cpu')
 
-    print('~~~ Image Retrieval (5k) ~~~')
-    recall = compute_recalls(query_cache=t_cache, pool_cache=v_cache, dataset=dataset['IR'], device=device)
+    print('~~~ [VANILLA] Image Retrieval (5k) ~~~')
+    recall = compute_recalls_vanilla(query_cache=t_cache, pool_cache=v_cache, dataset=dataset['IR'], device=device)
     print('[IR]: R@1: {}, R@5: {}, R@10: {}'.format(recall['R@1'], recall['R@5'], recall['R@10']))
 
-    print('~~~ Text Retrieval (5k) ~~~')
-    recall = compute_recalls(query_cache=v_cache, pool_cache=t_cache, dataset=dataset['TR'], device=device)
+    print('~~~ [VANILLA] Text Retrieval (5k) ~~~')
+    recall = compute_recalls_vanilla(query_cache=v_cache, pool_cache=t_cache, dataset=dataset['TR'], device=device)
+    print('[TR]: R@1: {}, R@5: {}, R@10: {}'.format(recall['R@1'], recall['R@5'], recall['R@10']))
+
+    print('~~~ [FAISS] Image Retrieval (5k) ~~~')
+    recall = compute_recalls_faiss(query_cache=t_cache, pool_cache=v_cache, dataset=dataset['IR'])
+    print('[IR]: R@1: {}, R@5: {}, R@10: {}'.format(recall['R@1'], recall['R@5'], recall['R@10']))
+
+    print('~~~ [FAISS] Text Retrieval (5k) ~~~')
+    recall = compute_recalls_faiss(query_cache=v_cache, pool_cache=t_cache, dataset=dataset['TR'])
     print('[TR]: R@1: {}, R@5: {}, R@10: {}'.format(recall['R@1'], recall['R@5'], recall['R@10']))

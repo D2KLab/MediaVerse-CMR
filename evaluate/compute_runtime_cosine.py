@@ -1,3 +1,12 @@
+"""
+@author: Matteo A. Senese
+
+This scripts computes the run time of retrieval approach based on cosine similarity for generic query-pool dataset.
+It is used to get run times on very large randomly generated datasets to have an idea of the scalability of the tool.
+(take a look at `prepare/create_random_cache.py`)
+"""
+
+
 import torch
 import argparse
 from datetime import datetime
@@ -11,6 +20,7 @@ time   = TypeVar('datetime.datetime')
 BATCH_SIZE = 1000
 
 
+#TODO include also top-k
 
 def get_batching_runtime(pool: Tensor, queries: Tensor, batch_size: int, device: torch.device) -> time:
     pool      = pool.to(device)

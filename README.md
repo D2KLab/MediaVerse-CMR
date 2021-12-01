@@ -18,7 +18,7 @@ Install spacy vocabulary
 python -m spacy download en_core_web_sm
 ```
 
-Install clip from [clip repository](https://github.com/openai/CLIP)
+Install clip from [clip repository](https://github.ckom/openai/CLIP)
 
 Install common package in editable mode
 ```

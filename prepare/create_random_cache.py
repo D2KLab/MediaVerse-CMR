@@ -1,3 +1,11 @@
+"""
+@author: Matteo A. Senese
+
+This script creates random vectors to create fake pools and queries. It is used to compute FAISS run times on very large pools.
+Since the vectors are random generated, the resulting dataset can not be used to compute quality scores (e.g., Recall@K).
+"""
+
+
 import argparse
 import torch
 import os

@@ -1,6 +1,17 @@
+"""
+@author: Matteo A. Senese
+
+This script creates the MSCOCO-1K split (both text and image retrieval).
+Each row of this split consists in 1 query and a retrieval pool of 1000 contents.
+Since the 1000 contents in each pool are randomly selected from MSCOCO, this script generates 5-folds to report Recall@K.
+
+Image retrieval: caption as query, 1000 images in the retrieval pool
+Text retrieval: image as query, 1000 captions in the retrieval pool
+"""
+
+
 import json
 import os
-import pdb
 import random
 from typing import Dict, List
 
@@ -52,7 +63,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--data_root',
         type=str,
-        help="Path to MSCOCO's root folder"
+        help="Path to MSCOCO root folder"
     )
     parser.add_argument(
         '--annotations_file',
