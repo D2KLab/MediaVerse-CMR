@@ -14,28 +14,28 @@ Tensor = TypeVar('torch.Tensor')
 # time   = TypeVar('datetime.datetime') 
 
 
-def compute_runtime_faiss(pool: Tensor, queries: Tensor, K: int, device: torch.device) -> time:
+def compute_runtime_faiss(pool: Tensor, queries: Tensor, K: int) -> time:
     assert(pool.shape[-1] == queries.shape[-1]), "Error! Pool and queries do not have the same dimensions!"
     # Create FAISS index and load data.
-    dim = pool.shape[-1]
-    pool = pool.squeeze(1)
-    pool = pool.numpy().astype(np.float32)
+    dim     = pool.shape[-1]
+    pool    = pool.squeeze(1)
+    pool    = pool.numpy().astype(np.float32)
     queries = queries.numpy().astype(np.float32)
-    index = faiss.IndexFlatL2(dim)   # build the index.
-    index.add(pool)                  # add vectors to the index.
-
+    index   = faiss.index_factory(dim, "Flat", faiss.METRIC_INNER_PRODUCT)
+    faiss.normalize_L2(pool)
+    index.add(pool)
     start = time.time()
-    for q in queries:
+    for q in tqdm(queries, desc='faiss'):
+        faiss.normalize_L2(q)
         D, I = index.search(q, K)     # Find top K nearest neighbourhs of q.  I= indexes of top K, D= distances of the top K
-        I = I.squeeze()
+        I    = I.squeeze()
     end = time.time()
     return end-start
 
 def compute_runtime_cosine(
     pool: Tensor,
     queries: Tensor,
-    K: int,
-    device: torch.device) -> time:
+    K: int) -> time:
     nq        = queries.shape[0]
     start     = time.time()
     for query in tqdm(queries, desc='cosine'):
@@ -44,45 +44,45 @@ def compute_runtime_cosine(
     end       = time.time()
     return end-start
 
-def compute_runtime_cosine_1(
-    pool: Tensor,
-    queries: Tensor,
-    K: int,
-    device: torch.device) -> time:
-    queries, pool = queries.double(), pool.double()
-    nq        = queries.shape[0]
-    start     = time.time()
-    for query in queries:
-        sim = cosine_similarity(query, pool).unsqueeze(0)
-        top_k_unsorted(sim, k=K, descending=True)
-    end       = time.time()
-    return end-start
+# def compute_runtime_cosine_1(
+#     pool: Tensor,
+#     queries: Tensor,
+#     K: int,
+#     device: torch.device) -> time:
+#     queries, pool = queries.double(), pool.double()
+#     nq        = queries.shape[0]
+#     start     = time.time()
+#     for query in queries:
+#         sim = cosine_similarity(query, pool).unsqueeze(0)
+#         top_k_unsorted(sim, k=K, descending=True)
+#     end       = time.time()
+#     return end-start
 
 
-def scan_parameters(pool, queries):
-    pool = pool.repeat(10, 1)  # Increase numper of pools to 50K
-    queries = queries[: 1000]  # Decrease number of queries to 1K
+# def scan_parameters(pool, queries):
+#     pool = pool.repeat(10, 1)  # Increase numper of pools to 50K
+#     queries = queries[: 1000]  # Decrease number of queries to 1K
 
-    K_size = [10, 100, 200, 400, 600, 800, 1000]
-    pool_size = [2000, 5000, 10000, 20000, 30000, 40000, 50000]
+#     K_size = [10, 100, 200, 400, 600, 800, 1000]
+#     pool_size = [2000, 5000, 10000, 20000, 30000, 40000, 50000]
 
-    res = []
-    # Scan runtime vs pool size, fixing topK.
-    topK = 800
-    for size in pool_size:
-        t_cos = compute_runtime_cosine(pool[: size], queries, topK, device)
-        t_faiss = compute_runtime_faiss(pool[: size], queries, topK, device)
-        print('Runtime: size: {} K:{}   --   cosine: {}     faiss:{}'.format(size, topK, t_cos, t_faiss))
-        res.append((size, topK, t_cos, t_faiss))
-    # Scan runtime vs top K size, fixing pool size.
-    size = 50000
-    for topK in K_size:
-        t_cos = compute_runtime_cosine(pool[: size], queries, topK, device)
-        t_faiss = compute_runtime_faiss(pool[: size], queries, topK, device)
-        print('Runtime: size: {} K:{}   --   cosine: {}     faiss:{}'.format(size, topK, t_cos, t_faiss))
-        res.append((size, topK, t_cos, t_faiss))
+#     res = []
+#     # Scan runtime vs pool size, fixing topK.
+#     topK = 800
+#     for size in pool_size:
+#         t_cos = compute_runtime_cosine(pool[: size], queries, topK, device)
+#         t_faiss = compute_runtime_faiss(pool[: size], queries, topK, device)
+#         print('Runtime: size: {} K:{}   --   cosine: {}     faiss:{}'.format(size, topK, t_cos, t_faiss))
+#         res.append((size, topK, t_cos, t_faiss))
+#     # Scan runtime vs top K size, fixing pool size.
+#     size = 50000
+#     for topK in K_size:
+#         t_cos = compute_runtime_cosine(pool[: size], queries, topK, device)
+#         t_faiss = compute_runtime_faiss(pool[: size], queries, topK, device)
+#         print('Runtime: size: {} K:{}   --   cosine: {}     faiss:{}'.format(size, topK, t_cos, t_faiss))
+#         res.append((size, topK, t_cos, t_faiss))
     
-    return res
+#     return res
 
 
 
@@ -113,10 +113,15 @@ if __name__ == '__main__':
     device = torch.device('cuda:0' if args.cuda else 'cpu')
 
     print(args)
+    k = 5000
+    pool      = torch.stack([v for v in pool.values()]).to(device).type(torch.float32) #cast from float16 to float32
+    queries   = torch.stack([v for v in queries.values()]).to(device).type(torch.float32) #cast from float16 to float32
+    t_cos   = compute_runtime_cosine(pool, queries, k)
+    t_faiss = compute_runtime_faiss(pool, queries, k)
+    print('Vanilla cosine (k={}): {} ms per query'.format(k, t_cos/len(queries)))
+    print('faiss (k={}): {} s per query'.format(k, t_faiss/len(queries)))
 
-    pool      = torch.stack([v for v in pool.values()]).to(device)
-    queries   = torch.stack([v for v in queries.values()]).to(device)
 
-    res = scan_parameters(pool, queries)
-    res = pd.DataFrame(res, columns=['db_size', 'top K', 'cosine', 'faiss'])
-    res.to_csv('evaluate/results/exec_runtimes_scan.csv')
+    # res = scan_parameters(pool, queries)
+    # res = pd.DataFrame(res, columns=['db_size', 'top K', 'cosine', 'faiss'])
+    # res.to_csv('evaluate/results/exec_runtimes_scan.csv')

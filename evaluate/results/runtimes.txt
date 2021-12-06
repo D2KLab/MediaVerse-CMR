@@ -1,0 +1,13 @@
+EMBEDDINGS_SIZE = 512
+K = 5000
+
+
+vanilla:
+    cosine+top_k: 0.12931 s
+
+filter:
+    filtering: 0.00741 s
+    filtering+cosine+top_k: 0.10584 s
+
+faiss:
+    normalization + faiss: 0.00072 s

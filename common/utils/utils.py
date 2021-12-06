@@ -110,11 +110,13 @@ def old_compute_cosine_similarity(query: Tensor, pool: Tensor):
     query  /= query.norm(dim=-1, keepdim=True)
     similarity   = (pool @ query.T).view(-1) #(100.0 * v_feats @ t_feats.T).softmax(dim=0)
     return similarity
+"""
 
 
 def compute_cosine_similarity(query: Tensor, pool: Tensor):
-    return torch.mm(query, pool.T) / (query.norm(dim=-1, keepdim=True) * pool.norm(dim=-1, keepdim=True))
-"""
+    return F.cosine_similarity(query, pool)
+    #return torch.mm(query, pool.T) / (query.norm(dim=-1, keepdim=True) * pool.norm(dim=-1, keepdim=True))
+
 
 def top_k(values: 'np.ndarray', k: int, descending: bool) -> Tuple['np.ndarray', 'np.ndarray']:
     """

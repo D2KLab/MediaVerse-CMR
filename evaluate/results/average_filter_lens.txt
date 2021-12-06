@@ -1,3 +1,5 @@
 average number of images that passes the filter:
 
 3732 / 5000
+
+pool reduction factor: 25.36%

@@ -83,19 +83,20 @@ if __name__ == '__main__':
     filter   = Filter(table)
     # 48 images missing
     pool  = [{'id': imgid, 'tags': data['objects'][str(imgid)]} for imgid in data['images'] if str(imgid) in data['objects']]
-    start = datetime.now()
+    t_start = datetime.now()
     print('Filtering pools ...')
-    new_ann = create_filtered_pools(data, filter)
-    print('Filtering run time: {}'.format(datetime.now()-start))
+    new_ann      = create_filtered_pools(data, filter)
+    t_filter_end = datetime.now()
     print('Doing retrieval ...')
+    k = 5000
     for row in tqdm(new_ann):
         queryid     = row['query']
         pool        = row['pool']
-        query_feats = t_cache[int(queryid)]
-        pool_feats  = torch.stack([v_cache[item['id']] for item in pool])
+        query_feats = t_cache[int(queryid)].type(torch.float32)
+        pool_feats  = torch.stack([v_cache[item['id']] for item in pool]).type(torch.float32)
         scores      = compute_cosine_similarity(query_feats, pool_feats)
-        top_k(scores.unsqueeze(0).numpy(), k=1, descending=True)
+        top_k(scores.unsqueeze(0).numpy(), k=k, descending=True)
 
-    end = datetime.now()
-    print('Run time: {}'.format(end-start))
-    
+    t_end = datetime.now()
+    print('filtering pool: {} s per query'.format((t_filter_end-t_start)/len(new_ann)))
+    print('filtering pool + cosine + top_k (k={}): {} s per query'.format(k, (t_end-t_start)/len(new_ann)))    
