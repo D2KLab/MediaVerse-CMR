@@ -2,10 +2,10 @@
 Cross-Modal retrieval module for T3.2 of MediaVerse
 
 ## Installation
-Create a Python virtual environment and activate it
+Create a conda virtual environment and activate it
 ```
-python3 -m venv venv_mediaverse
-source venv_mediaverse/bin/activate
+conda create --name mediaverse anaconda
+conda activate mediaverse
 ```
 
 Install requirements
@@ -20,10 +20,13 @@ python -m spacy download en_core_web_sm
 
 Install clip from [clip repository](https://github.ckom/openai/CLIP)
 
+Install faiss from conda forge following [faiss install](https://github.com/facebookresearch/faiss/blob/main/INSTALL.md)
+
 Install common package in editable mode
 ```
 pip install -e .
 ```
 
-## Usage    
-Use bash scripts located in `scripts/` to run computations.
+## Usage
+You have to download MSCOCO dataset on your computer.
+See the bash scripts located in `scripts/` to have an example of how to run computations.
