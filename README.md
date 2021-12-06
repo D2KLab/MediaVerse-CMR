@@ -4,7 +4,7 @@ Cross-Modal retrieval module for T3.2 of MediaVerse
 ## Installation
 Create a conda virtual environment and activate it
 ```
-conda create --name mediaverse anaconda
+conda create --name mediaverse python=3.8 anaconda
 conda activate mediaverse
 ```
 
