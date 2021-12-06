@@ -42,8 +42,13 @@ def compute_recalls_filter(query_cache: Dict[int, Tensor], pool_cache: Dict[int,
     curr_it = 1
     for row in loader:
         query, pool, gt = row['query'], row['pool'], row['gt']
-        # ground truth was filtered out
-        if gt not in pool:
+        try:
+            #gt is not always located at index 0 in the 5k IR split. Fix that
+            gt_idx = pool.index(gt)
+            if gt_idx != 0:
+                pool[0], pool[gt_idx] = pool[gt_idx], pool[0] 
+        except:
+            # ground truth was filtered out
             curr_it += 1
             continue
         pool_feats   = torch.stack([pool_cache[item_id] for item_id in pool]).squeeze(1).to(device)

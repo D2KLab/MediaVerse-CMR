@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
-source ./venv_mediaverse/bin/activate
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate mediaverse
 
 python prepare/create_clip_coco_cache.py \
     --data_root $COCO_PATH \
@@ -10,4 +11,4 @@ python prepare/create_clip_coco_cache.py \
     --out_dir cache \
     --cuda
 
-deactivate
+conda deactivate

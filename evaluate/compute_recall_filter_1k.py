@@ -67,24 +67,38 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    # loading dataset folds
-    dataset = collections.defaultdict(list)
+    # loading dataset folds for coco 1k
+    dataset_1k = collections.defaultdict(list)
     for fold_n in range(1, N_FOLDS+1):
         with open(os.path.join(args.annotations_dir, COCO_1K_IR_TEMPLATE.format(fold_n))) as fp:
             coco = json.load(fp)
-            dataset['IR'].append(coco['annotations'])
+            dataset_1k['IR'].append(coco['annotations'])
         with open(os.path.join(args.annotations_dir, COCO_1K_TR_TEMPLATE.format(fold_n))) as fp:
             coco = json.load(fp)
-            dataset['TR'].append(coco['annotations'])
+            dataset_1k['TR'].append(coco['annotations'])
+    # loading coco 5k
+    dataset_5k = {}
+    with open(os.path.join(args.annotations_dir, COCO_5K_IR)) as fp:
+        dataset_5k['IR'] = json.load(fp)['annotations']
+    with open(os.path.join(args.annotations_dir, COCO_5K_TR)) as fp:
+        dataset_5k['TR'] = json.load(fp)['annotations']
 
     t_cache = torch.load(args.text_cache)
     v_cache = torch.load(args.images_cache)
     device  = torch.device('cuda:0' if args.cuda else 'cpu')
 
     print('~~~ [FILTER] Image Retrieval (1k) ~~~')
-    recall = compute_folds_recalls(query_cache=t_cache, pool_cache=v_cache, datasets=dataset['IR'], device=device)
+    recall = compute_folds_recalls(query_cache=t_cache, pool_cache=v_cache, datasets=dataset_1k['IR'], device=device)
     print('[IR]: R@1: {}, R@5: {}, R@10: {}'.format(recall['R@1'], recall['R@5'], recall['R@10']))
 
     print('~~~ [FILTER] Text Retrieval (1k) ~~~')
-    recall = compute_folds_recalls(query_cache=v_cache, pool_cache=t_cache, datasets=dataset['TR'], device=device)
+    recall = compute_folds_recalls(query_cache=v_cache, pool_cache=t_cache, datasets=dataset_1k['TR'], device=device)
+    print('[TR]: R@1: {}, R@5: {}, R@10: {}'.format(recall['R@1'], recall['R@5'], recall['R@10']))
+
+    print('~~~ [FILTER] Image Retrieval (5k) ~~~')
+    recall = compute_recalls_filter(query_cache=t_cache, pool_cache=v_cache, dataset=dataset_5k['IR'], device=device)
+    print('[TR]: R@1: {}, R@5: {}, R@10: {}'.format(recall['R@1'], recall['R@5'], recall['R@10']))
+
+    print('~~~ [FILTER] Text Retrieval (5k) ~~~')
+    recall = compute_recalls_filter(query_cache=v_cache, pool_cache=t_cache, dataset=dataset_5k['TR'], device=device)
     print('[TR]: R@1: {}, R@5: {}, R@10: {}'.format(recall['R@1'], recall['R@5'], recall['R@10']))

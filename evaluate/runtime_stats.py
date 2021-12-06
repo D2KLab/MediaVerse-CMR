@@ -99,68 +99,43 @@ def plot_results(data: pd.DataFrame) -> None:
 
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument(
-    #     '--coco_visual',
-    #     type=str,
-    #     default='cache/coco_visual_cache.pth',
-    #     help='Path to images tensor pool'
-    # )
-    # parser.add_argument(
-    #     '--coco_text',
-    #     type=str,
-    #     default='cache/coco_text_cache.pth',
-    #     help='Path to text tensor pool'
-    # )
-    # parser.add_argument(
-    #     '--cuda',
-    #     action='store_true',
-    #     default=False
-    # )
-    # args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--coco_visual',
+        type=str,
+        default='cache/coco_visual_cache.pth',
+        help='Path to images tensor pool'
+    )
+    parser.add_argument(
+        '--coco_text',
+        type=str,
+        default='cache/coco_text_cache.pth',
+        help='Path to text tensor pool'
+    )
+    parser.add_argument(
+        '--cuda',
+        action='store_true',
+        default=False
+    )
+    args = parser.parse_args()
 
 
-    # with open(args.coco_visual, 'rb') as fp:
-    #     pool  = torch.load(fp)
-    # with open(args.coco_text, 'rb') as fp:
-    #     queries  = torch.load(fp)
-    # device = torch.device('cuda:0' if args.cuda else 'cpu')
+    with open(args.coco_visual, 'rb') as fp:
+        pool  = torch.load(fp)
+    with open(args.coco_text, 'rb') as fp:
+        queries  = torch.load(fp)
+    device = torch.device('cuda:0' if args.cuda else 'cpu')
 
-    # print(args)
+    print(args)
 
-    # pool      = torch.stack([v for v in pool.values()]).squeeze(1).to(device)
-    # queries   = torch.stack([v for v in queries.values()]).to(device)
+    pool      = torch.stack([v for v in pool.values()]).squeeze(1).to(device)
+    queries   = torch.stack([v for v in queries.values()]).to(device)
 
-    # torch.set_num_threads(1)
-    # res = scan_parameters(pool, queries)
-    # res.to_csv('evaluate/results/exec_runtimes_scan.csv')
-    # # res = pd.read_csv('evaluate/results/exec_runtimes_scan.csv')
-    # plot_results(res)
-
-    pool = np.random.rand(5000, 512).astype(np.float32)
-    query = np.random.rand(1, 512).astype(np.float32)
-
-    index = faiss.index_factory(512, "Flat", faiss.METRIC_INNER_PRODUCT)
-    faiss.normalize_L2(query)
-    faiss.normalize_L2(pool)
-    index.add(pool)
-    sims, res       = index.search(query, 5000)
-    
-    sims = sims.squeeze(0)
-    sims2 = np.matmul(query, pool.T).squeeze(0)
-    sims2.sort()
-    sims2 = sims2[::-1]
-
-    equals = sims == sims2
-
-    i = 0
-    for x, y, e in zip(sims, sims2, equals):
-        print(x, y, e)
-        i += 1
-        if i >= 20:
-            break
-
-    print(sum(equals))
+    torch.set_num_threads(1)
+    res = scan_parameters(pool, queries)
+    res.to_csv('evaluate/results/exec_runtimes_scan.csv')
+    # res = pd.read_csv('evaluate/results/exec_runtimes_scan.csv')
+    plot_results(res)
 
 
     

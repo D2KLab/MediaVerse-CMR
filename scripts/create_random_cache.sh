@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
-source ./venv_mediaverse/bin/activate
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate mediaverse
 
 python prepare/create_random_cache.py \
     --nb 1000000 \
@@ -8,4 +9,4 @@ python prepare/create_random_cache.py \
     --d 512 \
     --out_dir cache
 
-deactivate
+conda deactivate

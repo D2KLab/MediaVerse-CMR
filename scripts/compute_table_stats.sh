@@ -1,9 +1,10 @@
 #!/usr/bin/bash
 
-source ./venv_mediaverse/bin/activate
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate mediaverse
 
 python table_stats.py \
     --table_file concepts_table.json \
     --top_k 100
 
-deactivate
+conda deactivate
